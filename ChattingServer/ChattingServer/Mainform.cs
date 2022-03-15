@@ -35,6 +35,9 @@ namespace ChattingServer
             listSock = new List<Socket>();
             listUser = new List<String>();
             crypto = new Crypto();
+
+            rtb_text.AppendText("Server Listening ...");
+            rtb_text.AppendText("\r\n");
         }
 
         /// <summary>
@@ -82,7 +85,7 @@ namespace ChattingServer
                 client.ReceiveAsync(receiveAsync);
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendLine("*********** " + user + "- Connected ***********");
+                sb.Append(user + " - Connected ");
                 sb.AppendLine();
 
                 Invoke((MethodInvoker)delegate
@@ -115,11 +118,6 @@ namespace ChattingServer
             if (client.Connected && e.BytesTransferred > 0)
             {
                 int length = e.Buffer.Length;
-
-                //byte[] lengthByte = e.Buffer;
-                //int length = BitConverter.ToInt32(lengthByte, 0);
-                //byte[] data = new byte[length];
-
                 byte[] data = new byte[length];
 
                 client.Receive(data, length, SocketFlags.None);
@@ -141,8 +139,7 @@ namespace ChattingServer
 
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendLine("*********** " + Name + "- receive ***********");
-                sb.AppendLine(jobj["text"].ToString());
+                sb.AppendLine("[" + Name + "]" + " -----> "+jobj["text"].ToString());                
 
                 Invoke((MethodInvoker)delegate
                 {
