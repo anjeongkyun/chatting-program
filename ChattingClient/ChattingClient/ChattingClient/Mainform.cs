@@ -27,6 +27,9 @@ namespace ChattingClient
             InitializeComponent();
         }
 
+        /// <summary>
+        /// 서버 Connect
+        /// </summary>
         private void serverConnect()
         {
             if (tb_userid.Text == "")
@@ -42,20 +45,13 @@ namespace ChattingClient
                 try
                 {
                     client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
                     client.Connect(IPAddress.Parse(tb_server_ip.Text), int.Parse(tb_server_port.Text));
-
                     JObject data = new JObject();
-
                     data.Add("type", "init");
                     data.Add("text", tb_userid.Text);
-
                     string make_data = JsonConvert.SerializeObject(data);
-
                     string send_text = crypto.AESEncrypt256(make_data, "1234567890123456");
-
                     byte[] byte_data = Encoding.UTF8.GetBytes(send_text);
-
                     client.Send(byte_data);
                     SocketAsyncEventArgs receiveAsync = new SocketAsyncEventArgs();
                     receiveAsync.Completed += new EventHandler<SocketAsyncEventArgs>(receiveAsync_Completed);
@@ -77,6 +73,9 @@ namespace ChattingClient
             }
         }
 
+        /// <summary>
+        /// 서버 Close
+        /// </summary>
         private void serverClose()
         {
 
@@ -119,13 +118,9 @@ namespace ChattingClient
             // false : 서버 연결 안되어있음
             // true : 서버 연결 되어있음
             if (!_server_connect_status)
-            {
                 serverConnect();
-            }
             else
-            {
                 serverClose();
-            }
 
         }
 
@@ -178,7 +173,6 @@ namespace ChattingClient
 
             try
             {
-
                 JObject data = new JObject();
 
                 data.Add("userID", tb_userid.Text);
