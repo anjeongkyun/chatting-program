@@ -167,8 +167,6 @@ namespace ChattingServer
         private void Send(string text, string flag)
         {
 
-
-
             int sel_idx = lb_client_list.SelectedIndex;
 
             if (sel_idx == -1)

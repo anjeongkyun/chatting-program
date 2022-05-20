@@ -72,7 +72,7 @@
             this.btn_data_send.Name = "btn_data_send";
             this.btn_data_send.Size = new System.Drawing.Size(94, 33);
             this.btn_data_send.TabIndex = 5;
-            this.btn_data_send.Text = "전송";
+            this.btn_data_send.Text = "보내기";
             this.btn_data_send.UseVisualStyleBackColor = true;
             this.btn_data_send.Click += new System.EventHandler(this.btn_data_send_Click);
             // 
