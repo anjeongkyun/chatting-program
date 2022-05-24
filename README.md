@@ -7,8 +7,6 @@
 3. 특정 클라이언트에게만 송신 하는법
 4. Json을 이용한 메세지 송 수신 기능
 5. 송 수신 패킷 암호화&복호화(AES-256) 기능
-==수정 필요 사항==
-서버측 클라이언트 메세지 응답 후 재리슨 상태 로직 수정 필요
 <br><br>
 == 채팅 프로그램 개발 이슈 사항 포스팅 == <br>
 https://jeongkyun-it.tistory.com/category/Project%20History/%EB%8B%A4%EC%A4%91%20%EA%B8%B0%EB%8A%A5%EC%9D%84%20%ED%8F%AC%ED%95%A8%ED%95%9C%20%EC%B1%84%ED%8C%85%20%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8
