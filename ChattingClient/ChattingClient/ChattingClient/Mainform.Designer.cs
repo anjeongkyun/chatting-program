@@ -1,4 +1,4 @@
-﻿namespace ChattingClient
+﻿namespace ChattingclientSock
 {
     partial class Mainform
     {
