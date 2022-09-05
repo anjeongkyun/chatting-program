@@ -19,6 +19,8 @@ namespace ChattingServer
         List<Socket> listSock = null;
         List<String> listUser = null;
         Crypto crypto = null;
+        private string cryptoKey = "1234567890123456";
+
         public Mainform()
         {
             InitializeComponent();
@@ -71,7 +73,7 @@ namespace ChattingServer
 
                 String dataInfo = Encoding.UTF8.GetString(name).Trim().Replace("\0", "");
 
-                dataInfo = crypto.AESDecrypt256(dataInfo, "1234567890123456");
+                dataInfo = crypto.AESDecrypt256(dataInfo, cryptoKey);
 
                 JObject jobj = JObject.Parse(dataInfo);
 
@@ -126,7 +128,7 @@ namespace ChattingServer
                 if (dataInfo == "")
                     return;
 
-                dataInfo = crypto.AESDecrypt256(dataInfo, "1234567890123456");
+                dataInfo = crypto.AESDecrypt256(dataInfo, cryptoKey);
                 JObject jobj = JObject.Parse(dataInfo);
 
                 if (searchSocket(client) == "")
@@ -246,7 +248,7 @@ namespace ChattingServer
                 return;
             }
 
-            string msg = crypto.AESEncrypt256(rtb_send_Text.Text, "1234567890123456");
+            string msg = crypto.AESEncrypt256(rtb_send_Text.Text, cryptoKey);
 
             Send(msg, "one");
         }
@@ -270,7 +272,7 @@ namespace ChattingServer
                 return;
             }
 
-            string msg = crypto.AESEncrypt256(rtb_send_Text.Text, "1234567890123456");
+            string msg = crypto.AESEncrypt256(rtb_send_Text.Text, cryptoKey);
 
             Send(msg, "all");
         }

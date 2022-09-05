@@ -21,7 +21,7 @@ namespace ChattingclientSock
         Socket clientSock = null;
         ChattingClient.Crypto crypto = new Crypto();
         bool _server_connect_status = false;
-
+        private string cryptoKey = "1234567890123456";
 
         public Mainform()
         {
@@ -51,7 +51,7 @@ namespace ChattingclientSock
                     data.Add("type", "init");
                     data.Add("text", tb_userid.Text);
                     string make_data = JsonConvert.SerializeObject(data);
-                    string send_text = crypto.AESEncrypt256(make_data, "1234567890123456");
+                    string send_text = crypto.AESEncrypt256(make_data, cryptoKey);
                     byte[] byte_data = Encoding.UTF8.GetBytes(send_text);
                     clientSock.Send(byte_data);
                     SocketAsyncEventArgs receiveAsync = new SocketAsyncEventArgs();
@@ -82,7 +82,7 @@ namespace ChattingclientSock
 
             try
             {
-                string msg = crypto.AESEncrypt256(tb_userid.Text, "1234567890123456");
+                string msg = crypto.AESEncrypt256(tb_userid.Text, cryptoKey);
                 byte[] data = Encoding.UTF8.GetBytes(msg);
                 clientSock.Send(BitConverter.GetBytes(data.Length));
             }
@@ -139,7 +139,7 @@ namespace ChattingclientSock
                     clientSock.Receive(data, length, SocketFlags.None);
 
                     string dataInfo = Encoding.UTF8.GetString(data);
-                    dataInfo = crypto.AESDecrypt256(dataInfo, "1234567890123456");
+                    dataInfo = crypto.AESDecrypt256(dataInfo, cryptoKey);
 
                     StringBuilder sb = new StringBuilder();
                     sb.Append("[Server]");
@@ -182,7 +182,7 @@ namespace ChattingclientSock
 
                 string make_data = JsonConvert.SerializeObject(data);
 
-                byte[] send_text = Encoding.UTF8.GetBytes(crypto.AESEncrypt256(make_data, "1234567890123456"));
+                byte[] send_text = Encoding.UTF8.GetBytes(crypto.AESEncrypt256(make_data, cryptoKey));
 
                 clientSock.Send(send_text);
             }
