@@ -15,7 +15,7 @@ namespace ChattingServer
 {
     public partial class Mainform : Form
     {
-        Dictionary<string, Socket> dic_client = null;
+        Dictionary<string, Socket> clientDic = null;
         List<Socket> listSock = null;
         List<String> listUser = null;
         Crypto crypto = null;
@@ -31,7 +31,7 @@ namespace ChattingServer
         /// </summary>
         private void init()
         {
-            dic_client = new Dictionary<string, Socket>();
+            clientDic = new Dictionary<string, Socket>();
             listSock = new List<Socket>();
             listUser = new List<String>();
             crypto = new Crypto();
@@ -69,15 +69,15 @@ namespace ChattingServer
                 byte[] name = new byte[100];
                 client.Receive(name);
 
-                String str_data = Encoding.UTF8.GetString(name).Trim().Replace("\0", "");
+                String dataInfo = Encoding.UTF8.GetString(name).Trim().Replace("\0", "");
 
-                str_data = crypto.AESDecrypt256(str_data, "1234567890123456");
+                dataInfo = crypto.AESDecrypt256(dataInfo, "1234567890123456");
 
-                JObject jobj = JObject.Parse(str_data);
+                JObject jobj = JObject.Parse(dataInfo);
 
                 string user = jobj["text"].ToString();
 
-                dic_client.Add(user, client);
+                clientDic.Add(user, client);
                 SocketAsyncEventArgs receiveAsync = new SocketAsyncEventArgs();
                 receiveAsync.Completed += new EventHandler<SocketAsyncEventArgs>(receiveAsync_Completed);
                 receiveAsync.SetBuffer(new byte[4096], 0, 4096);
@@ -121,13 +121,13 @@ namespace ChattingServer
                 byte[] data = new byte[length];
 
                 client.Receive(data, length, SocketFlags.None);
-                String str_data = Encoding.UTF8.GetString(data).Replace("\0", "");
+                String dataInfo = Encoding.UTF8.GetString(data).Replace("\0", "");
 
-                if (str_data == "")
+                if (dataInfo == "")
                     return;
 
-                str_data = crypto.AESDecrypt256(str_data, "1234567890123456");
-                JObject jobj = JObject.Parse(str_data);
+                dataInfo = crypto.AESDecrypt256(dataInfo, "1234567890123456");
+                JObject jobj = JObject.Parse(dataInfo);
 
                 if (searchSocket(client) == "")
                 {
@@ -153,9 +153,9 @@ namespace ChattingServer
 
         private String searchSocket(Socket sender)
         {
-            foreach (String key in dic_client.Keys)
+            foreach (String key in clientDic.Keys)
             {
-                if (dic_client[key] == sender)
+                if (clientDic[key] == sender)
                 {
                     return key;
                 }
@@ -187,7 +187,7 @@ namespace ChattingServer
 
                     for (int i = 0; i < listUser.Count; i++)
                     {
-                        listSock.Add(dic_client[listUser[i]]);
+                        listSock.Add(clientDic[listUser[i]]);
                     }
 
                     for (int i = 0; i < listSock.Count; i++)
@@ -206,9 +206,9 @@ namespace ChattingServer
             {
                 try
                 {
-                    if (dic_client.ContainsKey(sender))
+                    if (clientDic.ContainsKey(sender))
                     {
-                        Socket client = dic_client[sender];
+                        Socket client = clientDic[sender];
                         byte[] data = Encoding.UTF8.GetBytes(message);
                         client.Send(BitConverter.GetBytes(data.Length));
                         client.Send(data, data.Length, SocketFlags.None);
